@@ -97,5 +97,6 @@
     <orderEntry type="library" exported="" name="bolts-android-1.2.0" level="project" />
     <orderEntry type="library" exported="" name="facebook-android-sdk-4.0.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="ParseFacebookUtilsV4-1.9.4" level="project" />
   </component>
 </module>

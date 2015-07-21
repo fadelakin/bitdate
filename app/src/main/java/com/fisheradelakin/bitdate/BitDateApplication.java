@@ -3,6 +3,7 @@ package com.fisheradelakin.bitdate;
 import android.app.Application;
 
 import com.parse.Parse;
+import com.parse.ParseFacebookUtils;
 
 /**
  * Created by Fisher on 7/21/15.
@@ -18,5 +19,6 @@ public class BitDateApplication extends Application {
 
         Parse.initialize(this, "GxjbG5WjErNyikhLsG4Dmb276txlYmCsJg1onPgi", "keo5ziWIgz5txlDXqi4Xxx3DiVxcN1afaJzWNoa9");
 
+        ParseFacebookUtils.initialize(this);
     }
 }
