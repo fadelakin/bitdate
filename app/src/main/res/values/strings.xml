@@ -3,4 +3,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="facebook_app_id">486271334872450</string>
+    <string name="title_activity_sign_in">SignInActivity</string>
+    <string name="facebook_login">Login with Facebook</string>
 </resources>
