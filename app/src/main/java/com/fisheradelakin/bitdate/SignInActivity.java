@@ -9,10 +9,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,13 +47,38 @@ public class SignInActivity extends AppCompatActivity {
                             Log.i(TAG, "User is null. Error creating user.");
                         } else if (parseUser.isNew()) {
                             Log.i(TAG, "User is new. Created new user.");
+                            getFacebookInfo();
                         } else {
                             Log.i(TAG, "Logged in existing user.");
+                            finish();
                         }
                     }
                 });
             }
         });
+    }
+
+    private void getFacebookInfo() {
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "picture, first_name");
+        new GraphRequest(AccessToken.getCurrentAccessToken(), "/me", parameters, HttpMethod.GET, new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+                JSONObject user = graphResponse.getJSONObject();
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                currentUser.put("firstName", user.optString("first_name"));
+                currentUser.put("pictureURL", user.optJSONObject("picture").optJSONObject("data").optString("url"));
+                currentUser.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e == null) {
+                            Log.i(TAG, "User saved");
+                            finish();
+                        }
+                    }
+                });
+            }
+        }).executeAsync();
     }
 
     @Override
