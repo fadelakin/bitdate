@@ -8,6 +8,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
 /**
@@ -54,7 +55,15 @@ public class CardStackContainer extends RelativeLayout implements View.OnTouchLi
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
-        mGestureDetector.onTouchEvent(event);
+        if (mGestureDetector.onTouchEvent(event)) {
+            if(mPositionX < mOriginX) { // check current position vs original position
+                v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_left));
+            } else {
+                v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_right));
+            }
+            removeView(v);
+            return true;
+        }
 
         int action = event.getAction();
         switch (action) {
