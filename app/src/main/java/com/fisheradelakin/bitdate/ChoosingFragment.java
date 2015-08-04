@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class ChoosingFragment extends Fragment {
 
+    private CardStackContainer mCardStack;
+
     public ChoosingFragment() {
     }
 
@@ -25,19 +27,19 @@ public class ChoosingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
 
-        CardStackContainer cardStack = (CardStackContainer) v.findViewById(R.id.card_stack);
+        mCardStack = (CardStackContainer) v.findViewById(R.id.card_stack);
         User user = new User();
         user.setFirstName("Fisher");
         List<User> users = new ArrayList<>();
         users.add(user);
         CardAdapter cardAdapter = new CardAdapter(getActivity(), users);
-        cardStack.setCardAdapter(cardAdapter);
+        mCardStack.setCardAdapter(cardAdapter);
 
         Button yesButton = (Button) v.findViewById(R.id.yes_button);
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mCardStack.swipeRight();
             }
         });
 
@@ -45,7 +47,7 @@ public class ChoosingFragment extends Fragment {
         noButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+                mCardStack.swipeLeft();
             }
         });
 
