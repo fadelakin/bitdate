@@ -20,13 +20,19 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true">
 
-        <Button
+        <ImageButton
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_nah"
             android:id="@+id/no_button"
+            android:background="@drawable/no_button"
             android:text="No"
             android:layout_width="100dp"
             android:layout_height="100dp"/>
 
-        <Button
+        <ImageButton
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_yes"
+            android:background="@drawable/yes_button"
             android:id="@+id/yes_button"
             android:text="Yes"
             android:layout_width="100dp"
