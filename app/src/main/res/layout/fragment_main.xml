@@ -6,6 +6,7 @@
                 tools:context=".MainActivityFragment">
 
     <com.fisheradelakin.bitdate.CardStackContainer
+        android:id="@+id/card_stack"
         android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
         android:background="@android:color/holo_red_dark"
