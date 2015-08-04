@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.parse.ParseObject;
 
@@ -31,6 +32,23 @@ public class ChoosingFragment extends Fragment {
         users.add(user);
         CardAdapter cardAdapter = new CardAdapter(getActivity(), users);
         cardStack.setCardAdapter(cardAdapter);
+
+        Button yesButton = (Button) v.findViewById(R.id.yes_button);
+        yesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        Button noButton = (Button) v.findViewById(R.id.no_button);
+        noButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
+
         return v;
     }
 }

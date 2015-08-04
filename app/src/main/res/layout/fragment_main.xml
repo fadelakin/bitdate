@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -9,9 +9,29 @@
     <com.fisheradelakin.bitdate.CardStackContainer
         android:id="@+id/card_stack"
         android:layout_marginTop="20dp"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
         android:background="@android:color/holo_red_dark"
         android:layout_width="250dp"
         android:layout_height="270dp"/>
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+
+        <Button
+            android:id="@+id/no_button"
+            android:text="No"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+
+        <Button
+            android:id="@+id/yes_button"
+            android:text="Yes"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
