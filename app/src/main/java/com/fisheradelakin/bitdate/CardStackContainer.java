@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.RelativeLayout;
 
 /**
@@ -19,6 +20,8 @@ public class CardStackContainer extends RelativeLayout implements View.OnTouchLi
     private float mLastTouchY;
     private float mPositionX;
     private float mPositionY;
+    private float mOriginX;
+    private float mOriginY;
 
     private CardAdapter mCardAdapter;
 
@@ -55,8 +58,12 @@ public class CardStackContainer extends RelativeLayout implements View.OnTouchLi
                 mPositionX = v.getX();
                 mPositionY = v.getY();
 
+                mOriginX = v.getX();
+                mOriginY = v.getY();
+
                 break;
             case MotionEvent.ACTION_UP:
+                reset(v);
                 break;
             case MotionEvent.ACTION_MOVE:
                 float xMove = event.getX();
@@ -74,5 +81,16 @@ public class CardStackContainer extends RelativeLayout implements View.OnTouchLi
                 break;
         }
         return true;
+    }
+
+    private void reset(View v) {
+        mPositionX = mOriginX;
+        mPositionY = mOriginY;
+
+        v.animate()
+                .setDuration(200)
+                .setInterpolator(new AccelerateInterpolator())
+                .x(mOriginX)
+                .y(mOriginY);
     }
 }
