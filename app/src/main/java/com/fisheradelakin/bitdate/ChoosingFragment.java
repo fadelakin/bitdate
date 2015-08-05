@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ChoosingFragment extends Fragment {
+public class ChoosingFragment extends Fragment implements UserDataSource.UserDataCallbacks {
 
     private CardStackContainer mCardStack;
 
@@ -30,19 +30,7 @@ public class ChoosingFragment extends Fragment {
 
         mCardStack = (CardStackContainer) v.findViewById(R.id.card_stack);
 
-        User user = new User();
-        user.setFirstName("Fisher");
-        User user2 = new User();
-        user2.setFirstName("Matt");
-        User user3 = new User();
-        user3.setFirstName("Jane");
-        List<User> users = new ArrayList<>();
-        users.add(user);
-        users.add(user2);
-        users.add(user3);
-
-        CardAdapter cardAdapter = new CardAdapter(getActivity(), users);
-        mCardStack.setCardAdapter(cardAdapter);
+        UserDataSource.getUnseenUsers(this);
 
         ImageButton yesButton = (ImageButton) v.findViewById(R.id.yes_button);
         yesButton.setOnClickListener(new View.OnClickListener() {
@@ -61,5 +49,11 @@ public class ChoosingFragment extends Fragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onUsersFetched(List<User> users) {
+        CardAdapter cardAdapter = new CardAdapter(getActivity(), users);
+        mCardStack.setCardAdapter(cardAdapter);
     }
 }

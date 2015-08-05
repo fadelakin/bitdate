@@ -7,6 +7,7 @@ public class User {
 
     private String mFirstName;
     private String mPictureURL;
+    private String mId;
 
     public String getFirstName() {
         return mFirstName;
@@ -22,5 +23,13 @@ public class User {
 
     public void setPictureURL(String pictureURL) {
         mPictureURL = pictureURL;
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        mId = id;
     }
 }
