@@ -29,6 +29,7 @@ public class CardStackContainer extends RelativeLayout implements View.OnTouchLi
     private GestureDetector mGestureDetector;
     private CardView mFrontCard;
     private CardView mBackCard;
+    private int mNextPosition;
 
     public CardStackContainer(Context context) {
         this(context, null, 0);
@@ -53,13 +54,19 @@ public class CardStackContainer extends RelativeLayout implements View.OnTouchLi
             cardView.setOnTouchListener(this);
             mFrontCard = cardView;
             addView(cardView);
+            mNextPosition++;
         }
 
-        if(mCardAdapter.getCount() > 1) {
-            CardView cardView = mCardAdapter.getView(1, null, this);
+        addBackCard();
+    }
+
+    private void addBackCard() {
+        if(mCardAdapter.getCount() > mNextPosition) {
+            CardView cardView = mCardAdapter.getView(mNextPosition, null, this);
             cardView.setTranslationY(30);
             mBackCard = cardView;
             addView(cardView);
+            mNextPosition++;
         }
         bringChildToFront(mFrontCard);
     }
@@ -83,8 +90,10 @@ public class CardStackContainer extends RelativeLayout implements View.OnTouchLi
         if(mBackCard != null) {
             mBackCard.animate().translationY(0).setDuration(200);
             mBackCard.setOnTouchListener(this);
+            mBackCard.setCardElevation(8);
             mFrontCard = mBackCard;
             mBackCard = null;
+            addBackCard();
         }
     }
 
