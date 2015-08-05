@@ -15,9 +15,9 @@ import java.util.List;
  */
 public class ActionDataSource {
 
-    private static final String TABLE_NAME = "Action";
-    private static final String COLUMN_BY_USER = "byUser";
-    private static final String COLUMN_TO_USER = "toUser";
+    public static final String TABLE_NAME = "Action";
+    public static final String COLUMN_BY_USER = "byUser";
+    public static final String COLUMN_TO_USER = "toUser";
     private static final String COLUMN_TYPE = "type";
 
     private static final String TYPE_LIKED = "Liked";

@@ -2,6 +2,7 @@ package com.fisheradelakin.bitdate;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -28,20 +29,34 @@ public class UserDataSource {
     }
 
     public static void getUnseenUsers(final UserDataCallbacks callbacks) {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereNotEqualTo("objectId", getCurrentUser().getId());
-        query.findInBackground(new FindCallback<ParseUser>() {
+        ParseQuery<ParseObject> seenUsersQuery = new ParseQuery<ParseObject>(ActionDataSource.TABLE_NAME);
+        seenUsersQuery.whereEqualTo(ActionDataSource.COLUMN_BY_USER, ParseUser.getCurrentUser().getObjectId());
+        seenUsersQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
-            public void done(List<ParseUser> parseUsers, ParseException e) {
+            public void done(List<ParseObject> list, ParseException e) {
                 if(e == null) {
-                    List<User> users = new ArrayList<>();
-                    for(ParseUser parseUser : parseUsers) {
-                        User user = parseUserToUser(parseUser);
-                        users.add(user);
+                    List<String> ids = new ArrayList<String>();
+                    for(ParseObject parseObject : list) {
+                        ids.add(parseObject.getString(ActionDataSource.COLUMN_TO_USER));
                     }
-                    if(callbacks != null) {
-                        callbacks.onUsersFetched(users);
-                    }
+                    ParseQuery<ParseUser> query = ParseUser.getQuery();
+                    query.whereNotEqualTo("objectId", getCurrentUser().getId());
+                    query.whereNotContainedIn("objectId", ids);
+                    query.findInBackground(new FindCallback<ParseUser>() {
+                        @Override
+                        public void done(List<ParseUser> parseUsers, ParseException e) {
+                            if(e == null) {
+                                List<User> users = new ArrayList<>();
+                                for(ParseUser parseUser : parseUsers) {
+                                    User user = parseUserToUser(parseUser);
+                                    users.add(user);
+                                }
+                                if(callbacks != null) {
+                                    callbacks.onUsersFetched(users);
+                                }
+                            }
+                        }
+                    });
                 }
             }
         });
