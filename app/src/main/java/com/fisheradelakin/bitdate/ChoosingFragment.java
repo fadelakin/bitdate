@@ -32,7 +32,7 @@ public class ChoosingFragment extends Fragment {
         User user = new User();
         user.setFirstName("Fisher");
         User user2 = new User();
-        user.setFirstName("Matt");
+        user2.setFirstName("Matt");
         List<User> users = new ArrayList<>();
         users.add(user);
         users.add(user2);

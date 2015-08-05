@@ -80,7 +80,12 @@ public class CardStackContainer extends RelativeLayout implements View.OnTouchLi
         }
 
         removeView(mFrontCard);
-        mFrontCard = null;
+        if(mBackCard != null) {
+            mBackCard.animate().translationY(0).setDuration(200);
+            mBackCard.setOnTouchListener(this);
+            mFrontCard = mBackCard;
+            mBackCard = null;
+        }
     }
 
     @Override
