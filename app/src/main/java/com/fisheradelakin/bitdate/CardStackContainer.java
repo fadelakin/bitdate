@@ -32,6 +32,8 @@ public class CardStackContainer extends RelativeLayout implements View.OnTouchLi
     private CardView mBackCard;
     private int mNextPosition;
 
+    private SwipeCallbacks mSwipeCallbacks;
+
     public CardStackContainer(Context context) {
         this(context, null, 0);
     }
@@ -87,11 +89,29 @@ public class CardStackContainer extends RelativeLayout implements View.OnTouchLi
     }
 
     public void swipeRight() {
+        int position = getSwipedPosition();
         swipeCard(true);
+        if (mSwipeCallbacks != null) {
+            mSwipeCallbacks.onSwipedRight(mCardAdapter.getItem(position));
+        }
+    }
+
+    private int getSwipedPosition() {
+        int position;
+        if(mBackCard != null) {
+            position = mNextPosition - 2;
+        } else {
+            position = mNextPosition - 1;
+        }
+        return position;
     }
 
     public void swipeLeft() {
+        int position = getSwipedPosition();
         swipeCard(false);
+        if (mSwipeCallbacks != null) {
+            mSwipeCallbacks.onSwipedLeft(mCardAdapter.getItem(position));
+        }
     }
 
     private void swipeCard(boolean swipeRight) {
@@ -170,11 +190,20 @@ public class CardStackContainer extends RelativeLayout implements View.OnTouchLi
                 .y(mOriginY);
     }
 
+    public void setSwipeCallbacks(SwipeCallbacks swipeCallbacks) {
+        mSwipeCallbacks = swipeCallbacks;
+    }
+
     private class FlingListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             Log.d(TAG, "FLING!!");
             return true;
         }
+    }
+
+    public interface SwipeCallbacks {
+        void onSwipedRight(User user);
+        void onSwipedLeft(User user);
     }
 }

@@ -2,6 +2,7 @@ package com.fisheradelakin.bitdate;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ChoosingFragment extends Fragment implements UserDataSource.UserDataCallbacks {
+public class ChoosingFragment extends Fragment implements UserDataSource.UserDataCallbacks, CardStackContainer.SwipeCallbacks {
+
+    private static final String TAG = "ChoosingFragment";
 
     private CardStackContainer mCardStack;
     private List<User> mUsers;
@@ -37,6 +40,7 @@ public class ChoosingFragment extends Fragment implements UserDataSource.UserDat
         mUsers = new ArrayList<>();
         mCardAdapter = new CardAdapter(getActivity(), mUsers);
         mCardStack.setCardAdapter(mCardAdapter);
+        mCardStack.setSwipeCallbacks(this);
 
         ImageButton yesButton = (ImageButton) v.findViewById(R.id.yes_button);
         yesButton.setOnClickListener(new View.OnClickListener() {
@@ -61,5 +65,15 @@ public class ChoosingFragment extends Fragment implements UserDataSource.UserDat
     public void onUsersFetched(List<User> users) {
         mUsers.addAll(users);
         mCardAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSwipedRight(User user) {
+        Log.d(TAG, "Swiped right " + user.getFirstName());
+    }
+
+    @Override
+    public void onSwipedLeft(User user) {
+        Log.d(TAG, "Swiped left " + user.getFirstName());
     }
 }
