@@ -31,8 +31,11 @@ public class ChoosingFragment extends Fragment {
         mCardStack = (CardStackContainer) v.findViewById(R.id.card_stack);
         User user = new User();
         user.setFirstName("Fisher");
+        User user2 = new User();
+        user.setFirstName("Matt");
         List<User> users = new ArrayList<>();
         users.add(user);
+        users.add(user2);
         CardAdapter cardAdapter = new CardAdapter(getActivity(), users);
         mCardStack.setCardAdapter(cardAdapter);
 
