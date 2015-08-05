@@ -74,6 +74,6 @@ public class ChoosingFragment extends Fragment implements UserDataSource.UserDat
 
     @Override
     public void onSwipedLeft(User user) {
-        Log.d(TAG, "Swiped left " + user.getFirstName());
+        ActionDataSource.saveUserSkipped(user.getId());
     }
 }
