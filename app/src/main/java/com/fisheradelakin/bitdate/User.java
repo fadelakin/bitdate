@@ -8,6 +8,11 @@ public class User {
     private String mFirstName;
     private String mPictureURL;
     private String mId;
+    private String mFacebookId;
+
+    public String getLargePictureURL() {
+        return "https://graph.facebook.com/v2.3/" + mFacebookId + "/picture?type=large";
+    }
 
     public String getFirstName() {
         return mFirstName;
@@ -31,5 +36,13 @@ public class User {
 
     public void setId(String id) {
         mId = id;
+    }
+
+    public String getFacebookId() {
+        return mFacebookId;
+    }
+
+    public void setFacebookId(String facebookId) {
+        mFacebookId = facebookId;
     }
 }

@@ -1,7 +1,5 @@
 package com.fisheradelakin.bitdate;
 
-import android.util.Log;
-
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -19,10 +17,11 @@ public class UserDataSource {
 
     private static final String COLUMN_FIRST_NAME = "firstName";
     private static final String COLUMN_PICTURE_URL = "pictureURL";
+    private static final String COLUMN_FACEBOOK_ID = "facebookId";
 
     public static User getCurrentUser() {
         if(sCurrentUser == null && ParseUser.getCurrentUser() != null) {
-            sCurrentUser = parseUsertoUser(ParseUser.getCurrentUser());
+            sCurrentUser = parseUserToUser(ParseUser.getCurrentUser());
         }
 
         return sCurrentUser;
@@ -37,7 +36,7 @@ public class UserDataSource {
                 if(e == null) {
                     List<User> users = new ArrayList<>();
                     for(ParseUser parseUser : parseUsers) {
-                        User user = parseUsertoUser(parseUser);
+                        User user = parseUserToUser(parseUser);
                         users.add(user);
                     }
                     if(callbacks != null) {
@@ -48,11 +47,12 @@ public class UserDataSource {
         });
     }
 
-    private static User parseUsertoUser(ParseUser parseUser) {
+    private static User parseUserToUser(ParseUser parseUser) {
         User user = new User();
         user.setFirstName(parseUser.getString(COLUMN_FIRST_NAME));
         user.setPictureURL(parseUser.getString(COLUMN_PICTURE_URL));
         user.setId(parseUser.getObjectId());
+        user.setFacebookId(parseUser.getString(COLUMN_FACEBOOK_ID));
         return user;
     }
 

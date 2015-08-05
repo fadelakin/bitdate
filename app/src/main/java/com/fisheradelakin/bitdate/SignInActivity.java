@@ -59,13 +59,14 @@ public class SignInActivity extends AppCompatActivity {
 
     private void getFacebookInfo() {
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "picture, first_name");
+        parameters.putString("fields", "picture, first_name, id");
         new GraphRequest(AccessToken.getCurrentAccessToken(), "/me", parameters, HttpMethod.GET, new GraphRequest.Callback() {
             @Override
             public void onCompleted(GraphResponse graphResponse) {
                 JSONObject user = graphResponse.getJSONObject();
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 currentUser.put("firstName", user.optString("first_name"));
+                currentUser.put("facebookId", user.optString("id"));
                 currentUser.put("pictureURL", user.optJSONObject("picture").optJSONObject("data").optString("url"));
                 currentUser.saveInBackground(new SaveCallback() {
                     @Override
