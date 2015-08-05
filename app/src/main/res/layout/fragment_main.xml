@@ -10,9 +10,8 @@
         android:id="@+id/card_stack"
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
-        android:background="@android:color/holo_red_dark"
-        android:layout_width="250dp"
-        android:layout_height="270dp"/>
+        android:layout_width="270dp"
+        android:layout_height="320dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
