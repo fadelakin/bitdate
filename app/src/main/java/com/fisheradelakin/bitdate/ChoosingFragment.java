@@ -19,6 +19,8 @@ import java.util.List;
 public class ChoosingFragment extends Fragment implements UserDataSource.UserDataCallbacks {
 
     private CardStackContainer mCardStack;
+    private List<User> mUsers;
+    private CardAdapter mCardAdapter;
 
     public ChoosingFragment() {
     }
@@ -31,6 +33,10 @@ public class ChoosingFragment extends Fragment implements UserDataSource.UserDat
         mCardStack = (CardStackContainer) v.findViewById(R.id.card_stack);
 
         UserDataSource.getUnseenUsers(this);
+
+        mUsers = new ArrayList<>();
+        mCardAdapter = new CardAdapter(getActivity(), mUsers);
+        mCardStack.setCardAdapter(mCardAdapter);
 
         ImageButton yesButton = (ImageButton) v.findViewById(R.id.yes_button);
         yesButton.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +59,7 @@ public class ChoosingFragment extends Fragment implements UserDataSource.UserDat
 
     @Override
     public void onUsersFetched(List<User> users) {
-        CardAdapter cardAdapter = new CardAdapter(getActivity(), users);
-        mCardStack.setCardAdapter(cardAdapter);
+        mUsers.addAll(users);
+        mCardAdapter.notifyDataSetChanged();
     }
 }
