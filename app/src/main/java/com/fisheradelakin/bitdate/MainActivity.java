@@ -1,12 +1,15 @@
 package com.fisheradelakin.bitdate;
 
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +21,26 @@ public class MainActivity extends AppCompatActivity {
         if(UserDataSource.getCurrentUser() == null) {
             Intent i = new Intent(this, SignInActivity.class);
             startActivity(i);
+        }
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
+    }
+
+    public class PagerAdapter extends FragmentStatePagerAdapter {
+
+        public PagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return new ChoosingFragment();
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
         }
     }
 
