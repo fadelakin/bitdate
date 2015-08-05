@@ -69,7 +69,7 @@ public class ChoosingFragment extends Fragment implements UserDataSource.UserDat
 
     @Override
     public void onSwipedRight(User user) {
-        Log.d(TAG, "Swiped right " + user.getFirstName());
+        ActionDataSource.saveUserLiked(user.getId());
     }
 
     @Override
