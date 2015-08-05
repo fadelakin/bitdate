@@ -35,12 +35,18 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return new ChoosingFragment();
+            switch(position) {
+                case 0:
+                    return new ChoosingFragment();
+                case 1:
+                    return new MatchesFragment();
+            }
+            return null;
         }
 
         @Override
         public int getCount() {
-            return 1;
+            return 2;
         }
     }
 
