@@ -15,26 +15,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
+    private static final int SIGN_IN_REQUEST = 10;
+
     private ImageView mChoosingIcon;
     private ImageView mMatchesIcon;
     private ViewPager mViewPager;
+    private PagerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(UserDataSource.getCurrentUser() == null) {
-            Intent i = new Intent(this, SignInActivity.class);
-            startActivity(i);
-        }
-
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
+        mAdapter = new PagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(this);
 
         mChoosingIcon = (ImageView) findViewById(R.id.logo_icon);
@@ -66,6 +68,29 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 R.string.close);
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+
+        if(UserDataSource.getCurrentUser() == null) {
+            Intent i = new Intent(this, SignInActivity.class);
+            startActivityForResult(i, SIGN_IN_REQUEST);
+        }
+
+        updateDrawer();
+    }
+
+    private void updateDrawer() {
+        ImageView userPhoto = (ImageView) findViewById(R.id.user_photo);
+        Picasso.with(this).load(UserDataSource.getCurrentUser().getLargePictureURL()).into(userPhoto);
+        TextView userName = (TextView) findViewById(R.id.user_name);
+        userName.setText(UserDataSource.getCurrentUser().getFirstName());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == SIGN_IN_REQUEST && resultCode == RESULT_OK) {
+            updateDrawer();
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

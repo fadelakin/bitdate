@@ -49,6 +49,7 @@ public class SignInActivity extends AppCompatActivity {
                             getFacebookInfo();
                         } else {
                             Log.i(TAG, "Logged in existing user.");
+                            setResult(RESULT_OK);
                             finish();
                         }
                     }
@@ -73,6 +74,7 @@ public class SignInActivity extends AppCompatActivity {
                     public void done(ParseException e) {
                         if(e == null) {
                             Log.i(TAG, "User saved");
+                            setResult(RESULT_OK);
                             finish();
                         }
                     }
