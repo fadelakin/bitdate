@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private ImageView mChoosingIcon;
     private ImageView mMatchesIcon;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +30,24 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             startActivity(i);
         }
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
-        viewPager.addOnPageChangeListener(this);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
+        mViewPager.addOnPageChangeListener(this);
 
         mChoosingIcon = (ImageView) findViewById(R.id.logo_icon);
+        mChoosingIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewPager.setCurrentItem(0);
+            }
+        });
         mMatchesIcon = (ImageView) findViewById(R.id.chat_icon);
+        mMatchesIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewPager.setCurrentItem(1);
+            }
+        });
         mChoosingIcon.setSelected(true);
         toggleColor(mChoosingIcon);
         toggleColor(mMatchesIcon);
