@@ -1,17 +1,22 @@
 package com.fisheradelakin.bitdate;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+
+    private ImageView mChoosingIcon;
+    private ImageView mMatchesIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +30,39 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
+        viewPager.addOnPageChangeListener(this);
+
+        mChoosingIcon = (ImageView) findViewById(R.id.logo_icon);
+        mMatchesIcon = (ImageView) findViewById(R.id.chat_icon);
+        mChoosingIcon.setSelected(true);
+        toggleColor(mChoosingIcon);
+        toggleColor(mMatchesIcon);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        mChoosingIcon.setSelected(!mChoosingIcon.isSelected());
+        mMatchesIcon.setSelected(!mMatchesIcon.isSelected());
+        toggleColor(mChoosingIcon);
+        toggleColor(mMatchesIcon);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    private void toggleColor(ImageView v) {
+        if(v.isSelected()) {
+            v.setColorFilter(Color.WHITE);
+        } else {
+            v.setColorFilter(getResources().getColor(R.color.primary_dark_blue));
+        }
     }
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
