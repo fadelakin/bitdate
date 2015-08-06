@@ -7,7 +7,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,6 +54,18 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mChoosingIcon.setSelected(true);
         toggleColor(mChoosingIcon);
         toggleColor(mMatchesIcon);
+
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                toolbar,
+                R.string.open,
+                R.string.close);
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
     }
 
     @Override
