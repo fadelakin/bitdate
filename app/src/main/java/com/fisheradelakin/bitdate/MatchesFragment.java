@@ -6,7 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,6 +20,8 @@ import java.util.List;
 public class MatchesFragment extends Fragment implements ActionDataSource.ActionDataCallbacks, UserDataSource.UserDataCallbacks {
 
     private static final String TAG = "MatchesFragment";
+    private MatchesAdapter mAdapter;
+    private ArrayList<User> mUsers;
 
     public MatchesFragment() {
         // Required empty public constructor
@@ -25,9 +31,17 @@ public class MatchesFragment extends Fragment implements ActionDataSource.Action
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         ActionDataSource.getMatches(this);
-        return inflater.inflate(R.layout.fragment_matches, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_matches, container, false);
+
+        ListView matchesListView = (ListView) v.findViewById(R.id.matches_list);
+        mUsers = new ArrayList<>();
+        mAdapter = new MatchesAdapter(mUsers);
+        matchesListView.setAdapter(mAdapter);
+
+        return v;
     }
 
 
@@ -38,8 +52,22 @@ public class MatchesFragment extends Fragment implements ActionDataSource.Action
 
     @Override
     public void onUsersFetched(List<User> users) {
-        for(User user : users) {
-            Log.d(TAG, "User is " + user.getFirstName());
+        mUsers.clear();
+        mUsers.addAll(users);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public class MatchesAdapter extends ArrayAdapter<User> {
+
+        MatchesAdapter(List<User> users) {
+            super(MatchesFragment.this.getActivity(), android.R.layout.simple_list_item_1, users);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView v = (TextView) super.getView(position, convertView, parent);
+            v.setText(getItem(position).getFirstName());
+            return v;
         }
     }
 }
