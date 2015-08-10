@@ -1,9 +1,11 @@
 package com.fisheradelakin.bitdate;
 
+import java.io.Serializable;
+
 /**
  * Created by Fisher on 8/3/15.
  */
-public class User {
+public class User implements Serializable {
 
     private String mFirstName;
     private String mPictureURL;

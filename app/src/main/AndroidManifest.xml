@@ -29,6 +29,11 @@
             android:name=".SignInActivity"
             android:label="@string/title_activity_sign_in" >
         </activity>
+        <activity
+            android:name=".ChatActivity"
+            android:label="@string/title_activity_chat"
+            android:theme="@style/ChatTheme">
+        </activity>
     </application>
 
 </manifest>

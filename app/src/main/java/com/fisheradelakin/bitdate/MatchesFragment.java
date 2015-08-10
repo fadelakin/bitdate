@@ -1,11 +1,13 @@
 package com.fisheradelakin.bitdate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -13,11 +15,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MatchesFragment extends Fragment implements ActionDataSource.ActionDataCallbacks, UserDataSource.UserDataCallbacks {
+public class MatchesFragment extends Fragment implements ActionDataSource.ActionDataCallbacks, UserDataSource.UserDataCallbacks, AdapterView.OnItemClickListener {
 
     private static final String TAG = "MatchesFragment";
     private MatchesAdapter mAdapter;
@@ -40,7 +41,7 @@ public class MatchesFragment extends Fragment implements ActionDataSource.Action
         mUsers = new ArrayList<>();
         mAdapter = new MatchesAdapter(mUsers);
         matchesListView.setAdapter(mAdapter);
-
+        matchesListView.setOnItemClickListener(this);
         return v;
     }
 
@@ -55,6 +56,14 @@ public class MatchesFragment extends Fragment implements ActionDataSource.Action
         mUsers.clear();
         mUsers.addAll(users);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        User user = mUsers.get(position);
+        Intent intent = new Intent(getActivity(), ChatActivity.class);
+        intent.putExtra(ChatActivity.USER_EXTRA, user);
+        startActivity(intent);
     }
 
     public class MatchesAdapter extends ArrayAdapter<User> {

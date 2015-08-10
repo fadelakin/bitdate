@@ -7,4 +7,10 @@
         <item name="colorPrimaryDark">@color/primary_dark_blue</item>
     </style>
 
+    <style name="ChatTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorPrimaryDark">@color/primary_dark_blue</item>
+    </style>
+
 </resources>
