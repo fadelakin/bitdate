@@ -37,7 +37,7 @@ public class SignInActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<String> permissions = new ArrayList<String>();
+                List<String> permissions = new ArrayList<>();
                 permissions.add("user_birthday");
                 ParseFacebookUtils.logInWithReadPermissionsInBackground(SignInActivity.this, permissions, new LogInCallback() {
                     @Override

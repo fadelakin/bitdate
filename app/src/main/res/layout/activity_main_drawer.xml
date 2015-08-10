@@ -34,4 +34,20 @@
 
     </com.fisheradelakin.material.RatioLayout>
 
+    <Button
+        android:id="@+id/edit_profile"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@drawable/bottom_border"
+        android:text="@string/edit_profile"/>
+
+    <Button
+        android:id="@+id/log_out"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:text="@string/log_out"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@drawable/bottom_border"/>
+
 </LinearLayout>
