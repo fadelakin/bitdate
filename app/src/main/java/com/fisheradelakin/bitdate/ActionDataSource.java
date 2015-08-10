@@ -8,6 +8,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ public class ActionDataSource {
     public static final String COLUMN_BY_USER = "byUser";
     public static final String COLUMN_TO_USER = "toUser";
     private static final String COLUMN_TYPE = "type";
+    private static final String COLUMN_UPDATED_AT = "updatedAt";
 
     private static final String TYPE_LIKED = "Liked";
     private static final String TYPE_MATCHED = "matched";
@@ -63,5 +65,31 @@ public class ActionDataSource {
         action.put(COLUMN_TO_USER, userId);
         action.put(COLUMN_TYPE, type);
         return action;
+    }
+
+    public static void getMatches(final ActionDataCallbacks callbacks) {
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(TABLE_NAME);
+        query.whereEqualTo(COLUMN_BY_USER, ParseUser.getCurrentUser().getObjectId());
+        query.whereEqualTo(COLUMN_TYPE, TYPE_MATCHED);
+        query.orderByDescending(COLUMN_UPDATED_AT);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if(e == null) {
+                    List<String> ids = new ArrayList<String>();
+                    for(ParseObject object : list) {
+                        ids.add(object.getString(COLUMN_TO_USER));
+                    }
+
+                    if(callbacks != null) {
+                        callbacks.onFetchedMatches(ids);
+                    }
+                }
+            }
+        });
+    }
+
+    public interface ActionDataCallbacks {
+        void onFetchedMatches(List<String> matchIds);
     }
 }

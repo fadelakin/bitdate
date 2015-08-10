@@ -19,6 +19,7 @@ public class UserDataSource {
     private static final String COLUMN_FIRST_NAME = "firstName";
     private static final String COLUMN_PICTURE_URL = "pictureURL";
     private static final String COLUMN_FACEBOOK_ID = "facebookId";
+    private static final String COLUMN_ID = "objectId";
 
     public static User getCurrentUser() {
         if(sCurrentUser == null && ParseUser.getCurrentUser() != null) {
@@ -45,19 +46,34 @@ public class UserDataSource {
                     query.findInBackground(new FindCallback<ParseUser>() {
                         @Override
                         public void done(List<ParseUser> parseUsers, ParseException e) {
-                            if(e == null) {
-                                List<User> users = new ArrayList<>();
-                                for(ParseUser parseUser : parseUsers) {
-                                    User user = parseUserToUser(parseUser);
-                                    users.add(user);
-                                }
-                                if(callbacks != null) {
-                                    callbacks.onUsersFetched(users);
-                                }
-                            }
+                            formatCallback(parseUsers, e, callbacks);
                         }
                     });
                 }
+            }
+        });
+    }
+
+    private static void formatCallback(List<ParseUser> parseUsers, ParseException e, UserDataCallbacks callbacks) {
+        if(e == null) {
+            List<User> users = new ArrayList<>();
+            for(ParseUser parseUser : parseUsers) {
+                User user = parseUserToUser(parseUser);
+                users.add(user);
+            }
+            if(callbacks != null) {
+                callbacks.onUsersFetched(users);
+            }
+        }
+    }
+
+    public static void getUsersIn(List<String> ids, final UserDataCallbacks callbacks) {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereContainedIn(COLUMN_ID, ids);
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> list, ParseException e) {
+                formatCallback(list, e, callbacks);
             }
         });
     }
