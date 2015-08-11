@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
+public class ChatActivity extends AppCompatActivity implements View.OnClickListener, MessageDataSource.MessagesCallbacks {
 
     public static final String USER_EXTRA = "USER";
 
@@ -27,6 +27,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private User mRecipient;
     private ListView mListView;
     private Date mLastMessageDate = new Date();
+    private String mConvoId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mMessages = new ArrayList<>();
         mAdapter = new MessagesAdapter(mMessages);
 
+        mListView.setAdapter(mAdapter);
+
         setTitle(mRecipient.getFirstName());
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -48,14 +51,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         Button sendButton = (Button) findViewById(R.id.send_message);
         sendButton.setOnClickListener(this);
 
-        Message msg = new Message();
-        msg.setDate(new Date());
-        msg.setText("Hello");
-        msg.setSender(UserDataSource.getCurrentUser().getId());
         String[] ids = {mRecipient.getId(), UserDataSource.getCurrentUser().getId()};
         Arrays.sort(ids);
-        String convoId = ids[0] + ids[1];
-        MessageDataSource.saveMessage(msg, convoId);
+        mConvoId = ids[0] + ids[1];
+
+        MessageDataSource.addMessageListener(mConvoId, this);
     }
 
     @Override
@@ -93,10 +93,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         msg.setDate(new Date());
         msg.setText(newMessage);
         msg.setSender(UserDataSource.getCurrentUser().getId());
-        String[] ids = {mRecipient.getId(), UserDataSource.getCurrentUser().getId()};
-        Arrays.sort(ids);
-        String convoId = ids[0] + ids[1];
-        MessageDataSource.saveMessage(msg, convoId);
+
+        MessageDataSource.saveMessage(msg, mConvoId);
+    }
+
+    @Override
+    public void onMessageAdded(Message message) {
+        mMessages.add(message);
+        mAdapter.notifyDataSetChanged();
     }
 
     private class MessagesAdapter extends ArrayAdapter<Message> {
