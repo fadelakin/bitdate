@@ -13,4 +13,5 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="log_out">Log Out</string>
     <string name="title_activity_chat">ChatActivity</string>
+    <string name="send">Send</string>
 </resources>

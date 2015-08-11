@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String USER_EXTRA = "USER";
 
@@ -42,6 +44,9 @@ public class ChatActivity extends AppCompatActivity {
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        Button sendButton = (Button) findViewById(R.id.send_message);
+        sendButton.setOnClickListener(this);
 
         Message msg = new Message();
         msg.setDate(new Date());
@@ -76,6 +81,22 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        EditText newMessageView = (EditText) findViewById(R.id.new_message);
+        String newMessage = newMessageView.getText().toString();
+        newMessageView.setText("");
+
+        Message msg = new Message();
+        msg.setDate(new Date());
+        msg.setText(newMessage);
+        msg.setSender(UserDataSource.getCurrentUser().getId());
+        String[] ids = {mRecipient.getId(), UserDataSource.getCurrentUser().getId()};
+        Arrays.sort(ids);
+        String convoId = ids[0] + ids[1];
+        MessageDataSource.saveMessage(msg, convoId);
     }
 
     private class MessagesAdapter extends ArrayAdapter<Message> {
