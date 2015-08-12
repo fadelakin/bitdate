@@ -28,6 +28,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private ListView mListView;
     private Date mLastMessageDate = new Date();
     private String mConvoId;
+    private MessageDataSource.MessagesListener mListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         Arrays.sort(ids);
         mConvoId = ids[0] + ids[1];
 
-        MessageDataSource.addMessageListener(mConvoId, this);
+        mListener = MessageDataSource.addMessageListener(mConvoId, this);
     }
 
     @Override
@@ -63,6 +64,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_chat, menu);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MessageDataSource.stop(mListener);
     }
 
     @Override

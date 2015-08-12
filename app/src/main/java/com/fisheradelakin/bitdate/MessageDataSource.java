@@ -34,46 +34,61 @@ public class MessageDataSource {
         sRef.child(conversationId).child(key).setValue(msg);
     }
 
-    public static void addMessageListener(String convoId, final MessagesCallbacks messagesCallbacks) {
-        sRef.child(convoId).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                HashMap<String, String> msg = (HashMap) dataSnapshot.getValue();
-                Message message = new Message();
-                message.setSender(msg.get("sender"));
-                message.setText(msg.get("text"));
-                try {
-                    message.setDate(sDateFormat.parse(dataSnapshot.getKey()));
-                } catch (ParseException e) {
-                    Log.d(TAG, "Something went wrong");
-                    e.printStackTrace();
-                }
+    public static MessagesListener addMessageListener(String convoId,  MessagesCallbacks messagesCallbacks) {
+        MessagesListener listener = new MessagesListener(messagesCallbacks);
+        sRef.child(convoId).addChildEventListener(listener);
+        return listener;
+    }
 
-                if(messagesCallbacks != null) {
-                    messagesCallbacks.onMessageAdded(message);
-                }
+    public static void stop(MessagesListener listener) {
+        sRef.removeEventListener(listener);
+    }
+
+    public static class MessagesListener implements ChildEventListener {
+
+        private MessagesCallbacks messagesCallbacks;
+
+        MessagesListener(MessagesCallbacks callbacks) {
+            messagesCallbacks = callbacks;
+        }
+
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap<String, String> msg = (HashMap) dataSnapshot.getValue();
+            Message message = new Message();
+            message.setSender(msg.get("sender"));
+            message.setText(msg.get("text"));
+            try {
+                message.setDate(sDateFormat.parse(dataSnapshot.getKey()));
+            } catch (ParseException e) {
+                Log.d(TAG, "Something went wrong");
+                e.printStackTrace();
             }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+            if(messagesCallbacks != null) {
+                messagesCallbacks.onMessageAdded(message);
             }
+        }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            }
+        }
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            }
+        }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            }
-        });
+        }
+
+        @Override
+        public void onCancelled(FirebaseError firebaseError) {
+
+        }
     }
 
     public interface MessagesCallbacks {
