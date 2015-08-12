@@ -18,9 +18,10 @@ import java.util.HashMap;
 public class MessageDataSource {
 
     private static final Firebase sRef = new Firebase("https://fishdate.firebaseio.com/messages");
-
     private static SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyyMMddmmss");
     private static final String TAG = "MessageDataSource";
+    private static final String COLUMN_TEXT = "text";
+    private static final String COLUMN_SENDER = "sender";
 
     public static void saveMessage(Message message, String conversationId) {
 
@@ -29,8 +30,8 @@ public class MessageDataSource {
         String key = sDateFormat.format(date);
 
         HashMap<String, String> msg = new HashMap<>();
-        msg.put("text", message.getText());
-        msg.put("sender", message.getSender());
+        msg.put(COLUMN_TEXT, message.getText());
+        msg.put(COLUMN_SENDER, message.getSender());
         sRef.child(conversationId).child(key).setValue(msg);
     }
 
@@ -56,8 +57,8 @@ public class MessageDataSource {
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap<String, String> msg = (HashMap) dataSnapshot.getValue();
             Message message = new Message();
-            message.setSender(msg.get("sender"));
-            message.setText(msg.get("text"));
+            message.setSender(msg.get(COLUMN_SENDER));
+            message.setText(msg.get(COLUMN_TEXT));
             try {
                 message.setDate(sDateFormat.parse(dataSnapshot.getKey()));
             } catch (ParseException e) {
